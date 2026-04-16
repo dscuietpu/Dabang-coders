@@ -3,11 +3,12 @@ export interface SubjectGame {
   title: string;
   description: string;
   route?: string;
+  externalUrl?: string; // ADDED: Required for external links
   status: 'ready' | 'coming-soon';
 }
 
 export interface SubjectDefinition {
-  id: 'english' | 'maths' | 'science' | 'social-science' | "speech" | "sign-language";
+  id: 'english' | 'maths' | 'science' | 'social-science' | "speech" | "sign-language" | 'exercise';
   name: string;
   emoji: string;
   accent: string;
@@ -21,11 +22,11 @@ export const subjects: SubjectDefinition[] = [
   {
     id: 'speech',
     name: 'Speech & Therapy',
-    emoji: '🗣️', // ADDED: Required emoji
-    accent: '#8b5cf6', // Violet
-    shadow: 'rgba(139, 92, 246, 0.35)', // ADDED: Required shadow to match the violet accent
+    emoji: '🗣️', 
+    accent: '#8b5cf6', 
+    shadow: 'rgba(139, 92, 246, 0.35)', 
     textStroke: '#5b21b6',
-    mascotPrompt: 'Let\'s make some magic sounds!', // ADDED: Required mascot prompt
+    mascotPrompt: 'Let\'s make some magic sounds!', 
     games: [
       {
         id: 'speech-playground',
@@ -88,6 +89,14 @@ export const subjects: SubjectDefinition[] = [
         description: 'Drag numbers and symbols to build a correct math problem!',
         status: 'ready',
         route: '/math-equations', 
+      },
+      // NEW GAME INTEGRATION
+      {
+        id: 'football-math',
+        title: 'Football Math',
+        description: 'Solve math equations to score epic goals!',
+        status: 'ready',
+        externalUrl: 'https://game-five-flax.vercel.app/', 
       }
     ],
   },
@@ -126,22 +135,49 @@ export const subjects: SubjectDefinition[] = [
       },
     ],
   },
+  // NEW SUBJECT: EXERCISE GAMES
   {
-  id: 'sign-language',
-  name: 'Sign Language',
-  emoji: '👐',
-  accent: '#38bdf8', // Sky blue
-  shadow: 'rgba(56, 189, 248, 0.35)',
-  textStroke: '#0284c7',
-  mascotPrompt: 'Watch my hands!',
-  games: [
-    {
-      id: 'path-of-lumina',
-      title: 'Path of Lumina',
-      description: 'Use your hands to bring light back to the world!',
-      status: 'ready',
-      route: '/deaf-lumina',
-    }
-  ]
-},
+    id: 'exercise',
+    name: 'Exercise Games',
+    emoji: '🏃‍♂️',
+    accent: '#fb923c', // Vibrant Orange
+    shadow: 'rgba(251, 146, 60, 0.35)',
+    textStroke: '#9a3412',
+    mascotPrompt: 'Time to move your body!',
+    games: [
+      {
+        id: 'fitness-adventure',
+        title: 'Fitness Adventure',
+        description: 'Jump, duck, and move to play the game!',
+        status: 'ready',
+        externalUrl: 'https://exercisesfinal.vercel.app/', 
+      }
+    ]
+  },
+  {
+    id: 'sign-language',
+    name: 'Sign Language',
+    emoji: '👐',
+    accent: '#38bdf8', // Sky blue
+    shadow: 'rgba(56, 189, 248, 0.35)',
+    textStroke: '#0284c7',
+    mascotPrompt: 'Watch my hands!',
+    games: [
+      {
+        id: 'path-of-lumina',
+        title: 'Path of Lumina',
+        description: 'Use your hands to bring light back to the world!',
+        status: 'ready',
+        route: '/deaf-lumina',
+      },
+      // NEW GAME INTEGRATION
+      {
+        id: 'deaf-practice',
+        title: 'Deaf Practice Hub',
+        description: 'Advanced sign language practices and games!',
+        status: 'ready',
+        externalUrl: 'https://playguugle-deaf.vercel.app/',
+      }
+    ]
+  },
 ];

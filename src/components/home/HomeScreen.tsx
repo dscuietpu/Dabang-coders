@@ -338,15 +338,20 @@ export function HomeScreen() {
     mascotSpeak('Pick a subject!');
   }, [mascotSpeak, setHoveredTarget, setMascotState]);
 
-  const launchGame = useCallback((route?: string) => {
-    if (!route) {
+  // UPDATED: Detects route OR externalUrl and routes appropriately
+  const launchGame = useCallback((route?: string, externalUrl?: string) => {
+    if (!route && !externalUrl) {
       setMascotState('thinking', 900);
       mascotSpeak(pickRandom(mascotDialogues.error));
       return;
     }
 
     playUiSound('select');
-    navigate(route);
+    if (externalUrl) {
+      window.open(externalUrl, '_blank', 'noopener,noreferrer');
+    } else if (route) {
+      navigate(route);
+    }
   }, [mascotSpeak, navigate, playUiSound, setMascotState]);
 
   useEffect(() => {
@@ -366,9 +371,10 @@ export function HomeScreen() {
       return;
     }
 
+    // UPDATED: Pass both route and externalUrl from the gesture click
     if (hoveredTarget.type === 'game' && selectedSubject) {
       const targetGame = selectedSubject.games.find((game) => game.id === hoveredTarget.id);
-      launchGame(targetGame?.route);
+      launchGame(targetGame?.route, targetGame?.externalUrl);
     }
   }, [cursor?.isPinching, hoveredTarget, launchGame, openSubjectMenu, resetSelection, selectedSubject]);
 
@@ -545,7 +551,8 @@ export function HomeScreen() {
                     type="button"
                     whileHover={{ scale: 1.03, rotate: -1 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() => launchGame(game.route)}
+                    // UPDATED: Now supports passing the externalURL mapping 
+                    onClick={() => launchGame(game.route, game.externalUrl)}
                     onMouseEnter={() => updateHoverTarget({ type: 'game', id: game.id })}
                     onMouseLeave={() => updateHoverTarget(null)}
                     animate={{
@@ -571,9 +578,12 @@ export function HomeScreen() {
                         </h3>
                         <p className="mt-2 text-base font-black text-slate-700">{game.description}</p>
                       </div>
+                      
+                      {/* UPDATED UI: Distinct look for Web Apps vs Internal Games */}
                       <div className="rounded-full border-[4px] border-white bg-white px-4 py-2 text-sm font-black uppercase tracking-[0.2em] text-slate-800">
-                        {game.status === 'ready' ? 'Play' : 'Soon'}
+                        {game.status === 'ready' ? (game.externalUrl ? 'Play ↗' : 'Play') : 'Soon'}
                       </div>
+
                     </div>
                   </motion.button>
                 ))}
